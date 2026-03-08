@@ -13,6 +13,9 @@ INSERT INTO emp VALUES
   (2, 'DAVID', 700, '01-JAN-1963'),
   (2, 'PETER', 600, '01-JAN-1964'),
   (3, 'MARK', 500, '01-JAN-1965');
+  (1, NULL,  NULL, NULL),          -- NULLs mixed into an existing group
+  (4, NULL,  NULL, NULL),          -- all-NULL group
+  (4, NULL,  NULL, NULL);
 
 
 SELECT deptno,
@@ -42,5 +45,13 @@ ORDER BY deptno;
 SELECT deptno,
        listagg(NULL::varchar2, ',' ORDER BY ename) AS employees
 FROM emp
+GROUP BY deptno
+ORDER BY deptno;
+
+-- NULL rows are skipped; mixed group still produces output
+SELECT deptno,
+       listagg(ename, ',' ORDER BY ename) AS employees
+FROM emp
+WHERE deptno IN (1, 4)
 GROUP BY deptno
 ORDER BY deptno;

@@ -11,6 +11,12 @@ INSERT INTO emp VALUES
   (2, 'DAVID', 700, '01-JAN-1963'),
   (2, 'PETER', 600, '01-JAN-1964'),
   (3, 'MARK', 500, '01-JAN-1965');
+  (1, NULL,  NULL, NULL),          -- NULLs mixed into an existing group
+  (4, NULL,  NULL, NULL),          -- all-NULL group
+  (4, NULL,  NULL, NULL);
+ERROR:  syntax error at or near "1"
+LINE 1: (1, NULL,  NULL, NULL),          -- NULLs mixed into an exis...
+         ^
 SELECT deptno,
        listagg(ename, ',' ORDER BY ename) AS employees
 FROM emp
@@ -70,4 +76,16 @@ ORDER BY deptno;
  2      | 
  3      | 
 (3 rows)
+
+-- NULL rows are skipped; mixed group still produces output
+SELECT deptno,
+       listagg(ename, ',' ORDER BY ename) AS employees
+FROM emp
+WHERE deptno IN (1, 4)
+GROUP BY deptno
+ORDER BY deptno;
+ deptno |   employees    
+--------+----------------
+ 1      | JOHN,KING,PAUL
+(1 row)
 
