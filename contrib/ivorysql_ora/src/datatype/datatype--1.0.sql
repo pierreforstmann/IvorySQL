@@ -10781,7 +10781,7 @@ BEGIN
         RETURN val::text;
     END IF;
 
-    RETURN state || delim || val::text;
+    RETURN state || COALESCE(delim, '') || val::text;
 END;
 $$ LANGUAGE plpgsql;
 

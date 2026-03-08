@@ -47,3 +47,27 @@ ORDER BY deptno;
  3      | 01-JAN-1965
 (3 rows)
 
+SELECT deptno,
+       listagg(ename, NULL ORDER BY ename) AS employees
+FROM emp
+GROUP BY deptno
+ORDER BY deptno;
+ deptno |  employees   
+--------+--------------
+ 1      | JOHNKINGPAUL
+ 2      | DAVIDPETER
+ 3      | MARK
+(3 rows)
+
+SELECT deptno,
+       listagg(NULL::varchar2, ',' ORDER BY ename) AS employees
+FROM emp
+GROUP BY deptno
+ORDER BY deptno;
+ deptno | employees 
+--------+-----------
+ 1      | 
+ 2      | 
+ 3      | 
+(3 rows)
+

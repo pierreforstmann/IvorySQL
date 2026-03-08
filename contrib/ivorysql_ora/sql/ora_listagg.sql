@@ -33,3 +33,14 @@ FROM emp
 GROUP BY deptno
 ORDER BY deptno;
 
+SELECT deptno,
+       listagg(ename, NULL ORDER BY ename) AS employees
+FROM emp
+GROUP BY deptno
+ORDER BY deptno;
+
+SELECT deptno,
+       listagg(NULL::varchar2, ',' ORDER BY ename) AS employees
+FROM emp
+GROUP BY deptno
+ORDER BY deptno;
