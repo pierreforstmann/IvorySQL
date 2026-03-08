@@ -78,7 +78,8 @@ ORA_REGRESS = \
 	ora_dbms_output \
 	ora_ascii \
 	dbms_lock \
-	utl_file
+	utl_file \
+	ora_listagg
 
 SHLIB_LINK += -lxml2
 

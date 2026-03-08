@@ -10762,3 +10762,38 @@ AS IMPLICIT;
 CREATE CAST (text AS text)
 WITH FUNCTION sys.orachar_to_long_with_typmod(text, integer, boolean)
 AS IMPLICIT;
+
+--
+-- LISTAGG
+--
+
+CREATE FUNCTION sys.listagg_sfunc(
+    state text,
+    val   anyelement,
+    delim text
+) RETURNS text AS $$
+BEGIN
+    IF val IS NULL THEN
+        RETURN state;
+    END IF;
+
+    IF state IS NULL OR state = '' THEN
+        RETURN val::text;
+    END IF;
+
+    RETURN state || delim || val::text;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE FUNCTION sys.listagg_final(state text)
+RETURNS text AS $$
+BEGIN
+    RETURN state;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE AGGREGATE sys.listagg(anyelement, text) (
+    SFUNC     = sys.listagg_sfunc,
+    STYPE     = text,
+    FINALFUNC = sys.listagg_final
+);
